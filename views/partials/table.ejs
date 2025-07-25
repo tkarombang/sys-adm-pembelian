@@ -1,0 +1,31 @@
+<div>
+  <h1>Daftar Produk</h1>
+  <table cellpadding="8">
+    <thead>
+      <tr>
+        <td>ID</td>
+        <td>NAMA PRODUCT</td>
+        <td>HARGA</td>
+        <td>STOCK</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% products.forEach((product)=> { %>
+        <tr>
+          <td>
+            <%= product.id %>
+          </td>
+          <td>
+            <%= product.name %>
+          </td>
+          <td>
+            <%= product.price %>
+          </td>
+          <td>
+            <%= product.stock %>
+          </td>
+        </tr>
+        <% }) %>
+    </tbody>
+  </table>
+</div>

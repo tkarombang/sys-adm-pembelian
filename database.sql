@@ -48,7 +48,6 @@ CREATE TABLE IF NOT EXISTS purchases(
 -- (7, 2),
 -- (8, 3),
 -- (9, 1),
--- (10, 2),
--- (11, 2);
+-- (10, 2);
 
 -- SELECT id, 20 FROM product;

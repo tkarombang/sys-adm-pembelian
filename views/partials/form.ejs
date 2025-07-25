@@ -1,0 +1,17 @@
+<div>
+  <h2>Form Pembelian</h2>
+  <form action="/purchase" method="POST">
+    <label for="product">Pilih Produk:</label>
+    <select name="product_id" id="product" required>
+      <% products.forEach(p=> { %>
+        <option value="<%= p.id %>">
+          <%= p.name %>
+        </option>
+        <% }) %>
+    </select>
+
+    <label for="qty">Jumlah:</label>
+    <input type="number" name="quantity" id="qty" min="1" required>
+    <button type="submit">Beli</button>
+  </form>
+</div>

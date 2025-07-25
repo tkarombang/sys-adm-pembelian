@@ -1,0 +1,41 @@
+<div>
+  <h2>Riwayat Pembelian</h2>
+  <table cellpadding="8">
+    <thead>
+      <tr>
+        <th>Produk</th>
+        <th>Jumlah</th>
+        <th>Status</th>
+        <th>Waktu</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% purchases.forEach(p=> { %>
+        <tr>
+          <td>
+            <%= p.product_name %>
+          </td>
+          <td>
+            <%= p.quantity %>
+          </td>
+          <td>
+            <%= p.status %>
+          </td>
+          <td>
+            <%= p.created_at %>
+          </td>
+          <td>
+            <% if (p.status==='active' ) { %>
+              <form action="/cancel/<%= p.id %>" method="POST" style="display:inline;">
+                <button type="submit">Cancel</button>
+              </form>
+              <% } else { %>
+                Dibatalkan
+                <% } %>
+          </td>
+        </tr>
+        <% }) %>
+    </tbody>
+  </table>
+</div>

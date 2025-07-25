@@ -36,15 +36,23 @@ app.get('/', (req, res) => {
 
 app.post('/purchase', (req, res) => {
   const { product_id, quantity } = req.body;
-  db.run(
-    `INSERT INTO purchases (product_id, quantity) VALUES (?, ?)`, [product_id, quantity],
-    function (err) {
-      if (err) return res.send('GAGAL SIMPAN PEMBELI')
+  db.get(`SELECT quantity FROM stock WHERE product_id = ?`, [product_id], (err, row) => {
+    if (err || !row) return res.send('STOK TIDAK DITEMUKAN');
 
-      console.log("PEMBELIAN BERHASIL, ID", this.lastID)
-      res.redirect('/')
-    }
-  )
+    if (row.quantity < quantity) return res.send('STOK TIDAK MENCUKUPI');
+
+    db.run(
+      `INSERT INTO purchases (product_id, quantity) VALUES (?, ?)`, [product_id, quantity],
+      function (err) {
+        if (err) return res.send('GAGAL SIMPAN PEMBELI')
+
+        console.log("PEMBELIAN BERHASIL, ID", this.lastID)
+        res.redirect('/')
+      }
+    )
+
+  })
+
 })
 
 
@@ -59,7 +67,9 @@ app.post('/cancel/:id', (req, res) => {
     db.run(`UPDATE purchases SET status = 'cancelled' WHERE id = ?`, [id], (err2) => {
       if (err2) return res.send('GAGAL CANCEL');
 
-      res.redirect('/')
+      db.run(`UPDATE stock SET quantity = quantity + ? WHERE product_id = ?`, [purchases.quantity, purchases.product_id], () => res.redirect('/')
+      );
+
     })
 
 
