@@ -6,9 +6,24 @@ const app = express();
 const PORT = 3000;
 
 app.set('view engine', 'ejs');
-// app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }))
+
+
+
+const runTransaction = (db, operationsm, callback) => {
+  db.serialize(() => {
+    db.run('BEGIN TRANSACTION');
+    operationsm(db, (err) => {
+      if (err) {
+        db.run('ROLLBACK');
+        return callback(err);
+      }
+      db.run('COMMIT');
+      callback(null);
+    })
+  })
+}
 
 app.get('/', (req, res) => {
   db.all('SELECT p.*, s.quantity AS stock FROM product p LEFT JOIN stock s ON  s.product_id = p.id', (err, products) => {
@@ -29,51 +44,74 @@ app.get('/', (req, res) => {
       res.render('index', { title: 'Admin Page', products, purchases })
     })
 
-
-
   });
 
 });
 
 app.post('/purchase', (req, res) => {
   const { product_id, quantity } = req.body;
-  db.get(`SELECT quantity FROM stock WHERE product_id = ?`, [product_id], (err, row) => {
-    if (err || !row) return res.send('STOK TIDAK DITEMUKAN');
 
-    if (row.quantity < quantity) return res.send('STOK TIDAK MENCUKUPI');
-
+  runTransaction(db, (db, done) => {
     db.run(
-      `INSERT INTO purchases (product_id, quantity) VALUES (?, ?)`, [product_id, quantity],
+      `UPDATE stock SET quantity = quantity - ? WHERE product_id = ? AND quantity >= ?`, [quantity, product_id, quantity],
       function (err) {
-        if (err) return res.send('GAGAL SIMPAN PEMBELI')
-
-        console.log("PEMBELIAN BERHASIL, ID", this.lastID)
-        res.redirect('/')
+        if (err || this.changes === 0) {
+          return done(new Error('STOCK TIDAK MENCUKUPI'));
+        }
+        db.run(`INSERT INTO purchases (product_id, quantity, status) VALUES (?, ?, 'active')`, [product_id, quantity],
+          function (err) {
+            done(err)
+          }
+        );
       }
-    )
-  })
-})
+    );
+  }, (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).send(err.message);
+    }
+    res.redirect('/')
+  });
+});
 
 
 app.post('/cancel/:id', (req, res) => {
   const id = req.params.id;
 
-  db.get(`SELECT * FROM purchases WHERE id = ?`, [id], (err, purchases) => {
-    if (err || !purchases) return res.send('DATA TIDAK DITEMUKAN');
+  runTransaction(db, (db, done) => {
+    db.get(
+      `SELECT product_id, quantity FROM purchases WHERE id = ? AND status = 'active'`, [id],
+      (err, purchases) => {
+        if (err || !purchases) {
+          return done(new Error('Transaksi Tidak Valid'));
+        }
+        db.run(
+          `UPDATE purchases SET status = 'cancelled' WHERE id = ?`, [id],
+          function (err) {
+            if (err) return done(err);
 
-    if (purchases.status === 'cancelled') return res.redirect('/');
+            db.run(
+              `UPDATE stock SET quantity = quantity + ? WHERE product_id = ?`, [purchases.quantity, purchases.product_id],
+              (err) => {
+                done(err);
+              }
+            );
+          }
+        );
+      }
+    );
+  }, (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).send(err.message);
+    }
+    res.redirect('/');
+  });
+});
 
-    db.run(`UPDATE purchases SET status = 'cancelled' WHERE id = ?`, [id], (err2) => {
-      if (err2) return res.send('GAGAL CANCEL');
-
-      db.run(`UPDATE stock SET quantity = quantity + ? WHERE product_id = ?`, [purchases.quantity, purchases.product_id], () => res.redirect('/')
-      );
-
-    })
 
 
-  })
-})
+
 
 
 app.listen(PORT, () => console.log(`Server running on  http://localhost:${PORT}`));

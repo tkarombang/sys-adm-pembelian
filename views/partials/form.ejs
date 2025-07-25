@@ -1,8 +1,8 @@
 <div>
-  <h2>Form Pembelian</h2>
-  <form action="/purchase" method="POST">
-    <label for="product">Pilih Produk:</label>
-    <select name="product_id" id="product" required>
+  <h2 class="text-blue-900 p-2">Form Pembelian</h2>
+  <form action="/purchase" method="POST" class="bg-slate-500 rounded shadow p-2 flex items-center m-2">
+    <select class="bg-stone-300 text-gray-500 border p-1 m-2 rounded-sm" name="product_id" id="product" required>
+      <option value="" disabled selected>Pilih Product</option>
       <% products.forEach(p=> { %>
         <option value="<%= p.id %>">
           <%= p.name %>
@@ -10,8 +10,9 @@
         <% }) %>
     </select>
 
-    <label for="qty">Jumlah:</label>
-    <input type="number" name="quantity" id="qty" min="1" required>
-    <button type="submit">Beli</button>
+    <input class="bg-stone-300 text-gray-500 border p-1 m-2 rounded-sm" type="number" name="quantity" id="qty" min="1"
+      placeholder="Jumlah" required>
+    <button type="submit" class="bg-teal-500 p-1 m-2 rounded-sm text-stone-50 hover:bg-teal-900 w-20">Beli</button>
   </form>
+
 </div>

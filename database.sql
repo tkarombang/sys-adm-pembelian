@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS purchases(
   FOREIGN KEY (product_id) REFERENCES product(id)
 );
 
+SELECT * FROM purchases;
+
 -- INSERT PRODUK DAN STOK
 -- INSERT INTO product (name, price) VALUES
 -- ('Laptop', 8443999),
@@ -51,4 +53,4 @@ CREATE TABLE IF NOT EXISTS purchases(
 -- (10, 2);
 
 -- SELECT id, 20 FROM product;
-SELECT * FROM product;
+
