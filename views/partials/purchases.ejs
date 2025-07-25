@@ -1,34 +1,35 @@
-<div>
-  <h2>Riwayat Pembelian</h2>
-  <table cellpadding="8">
+<div class="flex flex-col gap-10 justify-center  w-auto m-auto p-5 bg-slate-400 text-stone-50">
+  <h2 class="text-slate-300 font-bold">Riwayat Pembelian</h2>
+  <table cellpadding="8" class="w-70 border-separate border border-slate-500 ">
     <thead>
       <tr>
-        <th>Produk</th>
-        <th>Jumlah</th>
-        <th>Status</th>
-        <th>Waktu</th>
-        <th>Aksi</th>
+        <th class="border border-slate-600">Produk</th>
+        <th class="border border-slate-600">Jumlah</th>
+        <th class="border border-slate-600">Status</th>
+        <th class="border border-slate-600">Waktu</th>
+        <th class="border border-slate-600">Aksi</th>
       </tr>
     </thead>
     <tbody>
       <% purchases.forEach(p=> { %>
         <tr>
-          <td>
+          <td class="border border-slate-600">
             <%= p.product_name %>
           </td>
-          <td>
+          <td class="border border-slate-600">
             <%= p.quantity %>
           </td>
-          <td>
+          <td class="border border-slate-600">
             <%= p.status %>
           </td>
-          <td>
+          <td class="border border-slate-600">
             <%= p.created_at %>
           </td>
-          <td>
+          <td class="border border-slate-600">
             <% if (p.status==='active' ) { %>
               <form action="/cancel/<%= p.id %>" method="POST" style="display:inline;">
-                <button type="submit">Cancel</button>
+                <button type="submit"
+                  class="bg-rose-500 p-1 m-2 rounded-sm text-stone-50 hover:bg-rose-700 w-20">Cancel</button>
               </form>
               <% } else { %>
                 Dibatalkan
