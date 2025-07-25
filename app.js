@@ -6,7 +6,8 @@ const app = express();
 const PORT = 3000;
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+// app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
@@ -50,9 +51,7 @@ app.post('/purchase', (req, res) => {
         res.redirect('/')
       }
     )
-
   })
-
 })
 
 

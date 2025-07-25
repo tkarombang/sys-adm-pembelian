@@ -51,3 +51,4 @@ CREATE TABLE IF NOT EXISTS purchases(
 -- (10, 2);
 
 -- SELECT id, 20 FROM product;
+SELECT * FROM product;
