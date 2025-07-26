@@ -11,15 +11,15 @@ Sebuah sistem admin sederhana untuk mengelola pembelian produk yang dilengkapi d
    - Manajemen produk dan stok
 
 2. **Chatbot AI**:
-   - Terintegrasi dengan model AI (OpenAI, Deepseek, Gemini, atau Ollama)
+   - Terintegrasi dengan model AI (Gemini)
    - UI interaktif untuk berkomunikasi dengan chatbot
 
 ## Teknologi yang Digunakan
 
 - **Backend**: Node.js dengan Express.js
 - **Frontend**: EJS (Embedded JavaScript templates)
-- **Database**: SQL (MySQL/PostgreSQL/SQLite)
-- **Chatbot**: Terintegrasi dengan API AI
+- **Database**: SQL (SQLite)
+- **Chatbot**: Terintegrasi dengan API AI Gemini
 
 ## Panduan Instalasi
 
@@ -52,3 +52,17 @@ Sebuah sistem admin sederhana untuk mengelola pembelian produk yang dilengkapi d
 ```bash
 node app.js
 ```
+
+4. Membuat file .env untuk API Key Chatbot AI
+   isi dengan OPENAI_API_KEY=isi_api_keymu
+
+#### 🧪 3. **Tes Ulang Semua Fitur**
+
+Uji Aplikasi:
+
+- [x] Halaman form bisa simpan pembelian?
+- [x] Tabel pembelian muncul?
+- [x] Tombol cancel berfungsi?
+- [x] Chatbot bisa jawab beneran?
+- [x] Styling oke?
+- [x] Tidak ada error di console/server?
