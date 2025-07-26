@@ -1,0 +1,16 @@
+<div class="max-w-xl mx-auto mt-10 p-4 border rounded shadow bg-white">
+  <h2 class="text-2xl font-bold mb-4">Chatbot AI</h2>
+  <form action="/chatbot" method="post" class="mb-4">
+    <input type="text" name="message" placeholder="Tanyakan Sesuatu..." required class="w-full border p-2 mb-2 rounded">
+    <button type="submit" class="bg-teal-500 text-white px-4 py-2 rounded">Kirim</button>
+  </form>
+
+  <% if(response) { %>
+    <div class="border-t pt-4 text-gray-800">
+      <strong>Jawaban AI:</strong>
+      <p>
+        <%= response %>
+      </p>
+    </div>
+    <% } %>
+</div>
