@@ -6,8 +6,13 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 
 
+router.get('/about', (req, res) => {
+  res.render('about', { title: 'About Page' })
+})
+
+
 router.get('/chatbot', (req, res) => {
-  res.render('chatbot', { response: "AI Chatbot" })
+  res.render('chatbot', { response: "AI Chatbot", title: "Chatbot" })
 })
 
 router.post('/chatbot', async (req, res) => {

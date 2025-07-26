@@ -1,7 +1,8 @@
 // /** @type {import('tailwindcss').Config} */
-export const content = {
+const content = {
   content: [
     "./views/**/*.{ejs, html}",
+    "./public/**/*.js"
   ],
   safelist: [
     'p-2',
@@ -12,3 +13,4 @@ export const content = {
   plugins: [],
 }
 
+module.exports = content;

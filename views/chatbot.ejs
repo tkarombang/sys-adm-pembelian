@@ -1,5 +1,9 @@
-<div class="max-w-xl mx-auto mt-10 p-4 border rounded shadow bg-white">
-  <h2 class="text-2xl font-bold mb-4">Chatbot AI</h2>
+<h1 class="text-teal-600 font-bold">Halo Tailwind active</h1>
+<div class="chatbot-container active">
+  <div class="chatbot-header">
+    <h2>Gemini Assistant</h2>
+    <button class="close-btn">&times;</button>
+  </div>
   <form action="/chatbot" method="post" class="mb-4">
     <input type="text" name="message" placeholder="Tanyakan Sesuatu..." required class="w-full border p-2 mb-2 rounded">
     <button type="submit" class="bg-teal-500 text-white px-4 py-2 rounded">Kirim</button>
@@ -14,3 +18,43 @@
     </div>
     <% } %>
 </div>
+
+<style>
+  /* .chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0, 2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(30px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+
+  .chatbot-container.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .chatbot-header h2 {
+    margin: 0;
+    font-size: 1.2ren;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  } */
+</style>

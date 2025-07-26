@@ -1,4 +1,5 @@
 const express = require('express');
+const expressLayouts = require('express-ejs-layouts')
 const path = require('path');
 const db = require('./models/db');
 require('dotenv').config();
@@ -7,13 +8,16 @@ const app = express();
 const PORT = 3000;
 
 const indexRouter = require('./routes/index')
+app.use(expressLayouts)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', indexRouter);
+app.set('layout', 'layouts/layout')
 app.set('view engine', 'ejs');
 // eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, 'public')));
-
+// eslint-disable-next-line no-undef
+app.set('views', path.join(__dirname, 'views'))
 
 
 const runTransaction = (db, operationsm, callback) => {
