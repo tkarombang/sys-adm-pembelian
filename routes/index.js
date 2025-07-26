@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+// eslint-disable-next-line no-undef
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const { OpenAI } = require('openai');
 
-const openai = new OpenAI({
-  // eslint-disable-next-line no-undef
-  apiKey: process.env.OPENAI_API_KEY
-})
 
 router.get('/chatbot', (req, res) => {
   res.render('chatbot', { response: "AI Chatbot" })
@@ -14,32 +12,33 @@ router.get('/chatbot', (req, res) => {
 
 router.post('/chatbot', async (req, res) => {
   try {
+    // Gunakan model yang tersedia (pilih salah satu)
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash-002",
+      apiVersion: "v1"
+    });
 
-    const { message } = await req.body;
+    const result = await model.generateContent({
+      contents: [{
+        parts: [{ text: req.body.message }]
+      }]
+    });
 
-    if (!message) {
-      return res.status(400).json({ error: "Harus Ngomong" });
-    }
-
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        { role: 'System', content: 'Anda  adalah Asisten yang membantu pengguna' },
-        { role: 'user', content: message }
-      ],
-      temperature: 0.7,
-    })
-    const aiResponse = completion.choices[0].message.content;
-    res.json({ reply: aiResponse })
-
-  } catch (err) {
-    console.log("Chatbot error:", err);
+    const responseText = result.response.text();
+    // res.json({ reply: response });
+    res.render('chatbot', { response: responseText })
+  } catch (error) {
+    console.error("Error Detail:", error);
     res.status(500).json({
-      error: "Terjadi Kesalahan",
-      details: err.message
-    })
+      error: "Gagal memproses permintaan",
+      availableModels: [
+        "gemini-1.5-pro-002",
+        "gemini-1.5-pro",
+        "gemini-1.5-flash-002"
+      ]
+    });
   }
-})
+});
 
 module.exports = router
 
