@@ -63,6 +63,7 @@ Uji Aplikasi:
 - [x] Halaman form bisa simpan pembelian?
 - [x] Tabel pembelian muncul?
 - [x] Tombol cancel berfungsi?
+- [x] Arahkan localhost:PORT/chatbot
 - [x] Chatbot bisa jawab beneran?
 - [x] Styling oke?
 - [x] Tidak ada error di console/server?
