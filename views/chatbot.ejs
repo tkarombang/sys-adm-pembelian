@@ -1,60 +1,87 @@
-<h1 class="text-teal-600 font-bold">Halo Tailwind active</h1>
-<div class="chatbot-container active">
-  <div class="chatbot-header">
-    <h2>Gemini Assistant</h2>
-    <button class="close-btn">&times;</button>
+<div id="chatbotContainer active" class="w-80 h-[500px] bg-stone-200 rounded-lg shadow-xl flex flex-col">
+  <div class="bg-slate-400 text-white p-4 flex justify-between items-center">
+    <h3 class="font-semibold text-lg">Gemini Assistant</h3>
+    <button id="close-chatbot"
+      class="w-6 h-6 flex justify-center items-center bg-rose-300 hover:bg-rose-400 rounded-s-sm"><span
+        class="text-white hover:text-slate-200 text-xl">X</span></button>
   </div>
-  <form action="/chatbot" method="post" class="mb-4">
-    <input type="text" name="message" placeholder="Tanyakan Sesuatu..." required class="w-full border p-2 mb-2 rounded">
-    <button type="submit" class="bg-teal-500 text-white px-4 py-2 rounded">Kirim</button>
-  </form>
 
-  <% if(response) { %>
-    <div class="border-t pt-4 text-gray-800">
-      <strong>Jawaban AI:</strong>
-      <p>
-        <%= response %>
-      </p>
-    </div>
-    <% } %>
+  <div id="chatMessage" class="chat-message overflow-y-auto flex-1 p-4 space-y-3 h-[400px]">
+    <% if(chats && chats.length> 0) {%>
+      <% chats.forEach(function(chat) { %>
+        <% if(chat.role==='AI' ) {%>
+          <div class="flex items-start space-x-2 border-t pt-4 text-gray-800">
+            <div class="shrink-0 w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center text-sm">
+              <strong>AI</strong>
+            </div>
+
+            <div class="bg-gray-100 px-4 py-2 rounded-lg max-w-[80%]">
+              <p>
+                <%= chat.message %>
+              </p>
+            </div>
+          </div>
+          <% }else{ %>
+            <div class="flex items-start justify-end space-x-2 pt-4 text-gray-800">
+              <div class="bg-blue-100 px-4 py-2 rounded-lg max-w-[80%]">
+                <p>
+                  <%= chat.message %>
+                </p>
+              </div>
+              <div class="shrink-0 w-8 h-8 rounded-full bg-slate-600
+                 text-white flex items-center justify-center text-sm">
+                <strong>Me</strong>
+              </div>
+            </div>
+            <% } %>
+              <% }) %>
+                <% } %>
+
+
+  </div>
+
+  <div class="border-t border-gray-200 p-3">
+    <form action="/chatbot" method="post" class="mb-4 flex items-baseline space-x-2">
+      <input id="inputChat" type="text" name="message" placeholder="Tanyakan Sesuatu..." required
+        class="w-full whitespace-normal text-wrap border p-2 mb-2 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 max-h-32" />
+      <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white p-2 rounded-full">Send</button>
+    </form>
+  </div>
+
 </div>
 
 <style>
-  /* .chatbot-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 350px;
-    height: 500px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0, 2);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transform: translateY(30px);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 1000;
+  .chat-messages {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e0 #f7fafc;
   }
 
-  .chatbot-container.active {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
+  /* Untuk browser WebKit (Chrome, Safari) */
+  .chat-messages::-webkit-scrollbar {
+    width: 8px;
   }
 
-  .chatbot-header h2 {
-    margin: 0;
-    font-size: 1.2ren;
+  .chat-messages::-webkit-scrollbar-track {
+    background: #f7fafc;
   }
 
-  .close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-  } */
+  .chat-messages::-webkit-scrollbar-thumb {
+    background-color: #cbd5e0;
+    border-radius: 4px;
+  }
+
+  /* Animasi auto-scroll ke bawah */
+  @keyframes smoothScroll {
+    from {
+      scroll-behavior: smooth;
+    }
+
+    to {
+      scroll-behavior: smooth;
+    }
+  }
+
+  .chat-messages {
+    animation: smoothScroll 0.5s forwards;
+  }
 </style>

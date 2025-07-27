@@ -10,14 +10,43 @@ router.get('/about', (req, res) => {
   res.render('about', { title: 'About Page' })
 })
 
+router.use('/chatbot', (req, res, next) => {
+  if (req.query.reload === 'true') {
+    return next();
+  }
+
+  if (!req.header.referer || !req.header.referer.includes('/chatbot')) {
+    req.session.chats = [
+      { role: 'AI', message: 'Hai! Saya gemini' }
+    ]
+  }
+  next();
+})
 
 router.get('/chatbot', (req, res) => {
-  res.render('chatbot', { response: "AI Chatbot", title: "Chatbot" })
+  if (!req.session.chats || req.session.chats.length === 0) {
+    req.session.chats = [
+      { role: 'AI', message: 'Hai! Saya Gemini...' }
+    ]
+  }
+  res.render('chatbot', {
+    response: 'Chatbot AI',
+    title: 'Chatbot',
+    chats: req.session.chats
+  })
 })
 
 router.post('/chatbot', async (req, res) => {
   try {
-    // Gunakan model yang tersedia (pilih salah satu)
+    if (!req.session.chats) {
+      req.session.chats = [];
+    }
+
+    req.session.chats.push({
+      role: 'user',
+      message: req.body.message
+    })
+
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash-002",
       apiVersion: "v1"
@@ -30,12 +59,30 @@ router.post('/chatbot', async (req, res) => {
     });
 
     const responseText = result.response.text();
-    // res.json({ reply: response });
-    res.render('chatbot', { response: responseText })
+    // res.json({ reply: responseText });
+    req.session.chats.push({
+      role: 'AI',
+      message: responseText
+    })
+    res.render('chatbot', {
+      title: 'Chatbot',
+      chats: req.session.chats
+    })
+    // res.render('chatbot', { response: responseText, title: 'Chatbot' })
   } catch (error) {
     console.error("Error Detail:", error);
-    res.status(500).json({
+
+    if (!req.session.chats) {
+      req.session.chats = [];
+    }
+
+    req.session.chats.push({
+      role: 'AI',
+      message: 'Maaf, Terjadi kesalahan...'
+    })
+    res.status(500).render('chatbot', {
       error: "Gagal memproses permintaan",
+      title: 'Chatbot',
       availableModels: [
         "gemini-1.5-pro-002",
         "gemini-1.5-pro",
