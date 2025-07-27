@@ -41,14 +41,16 @@
   </div>
 
   <div class="border-t border-gray-200 p-3">
-    <form action="/chatbot" method="post" class="mb-4 flex items-baseline space-x-2">
-      <input id="inputChat" type="text" name="message" placeholder="Tanyakan Sesuatu..." required
-        class="w-full whitespace-normal text-wrap border p-2 mb-2 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 max-h-32" />
-      <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white p-2 rounded-full">Send</button>
+    <form action="/chatbot" method="post" class="mb-4 flex space-x-2">
+      <textarea id="inputChat" type="text" name="message" placeholder="Tanyakan Sesuatu..." rows="1"
+        class="w-full border p-2 mb-2 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none overflow-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden whitespace-pre-wrap"
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';this.style.borderRadius='20px'"></textarea>
+      <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white px-2 py-2 rounded-lg">Send</button>
     </form>
   </div>
 
 </div>
+
 
 <style>
   .chat-messages {

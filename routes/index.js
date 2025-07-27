@@ -38,7 +38,7 @@ router.get('/chatbot', (req, res) => {
 
 router.post('/chatbot', async (req, res) => {
   try {
-    if (!req.session.chats) {
+    if (!req.session.chats || req.session.chats.length === 0) {
       req.session.chats = [];
     }
 
